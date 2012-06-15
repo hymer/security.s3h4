@@ -1,0 +1,81 @@
+body {
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	background-color: #EEE;
+	font-family: "微软雅黑";
+}
+#page {
+	width: 1024px;
+	margin: 0 auto;
+	text-align: left;
+}
+#head {
+	height: 108px;
+}
+#body {
+	padding: 5px 0;
+	clear: both;
+}
+#left {
+	width: 24%;
+	float: left;
+}
+#main {
+	width: 76%;
+	min-height: 420px;
+	float: left;
+}
+#foot {
+	clear: both;
+	height: 90px;
+	padding: 20px 0;
+}
+div.capture-header {
+	padding: 5px 0px 15px 0px;
+}
+font.capture-title {
+	font-size: 12pt;
+	font-weight: bolder;
+	font-family: "微软雅黑";
+}
+span.operators {
+	float: right;
+}
+.msg {
+	font-size: 10pt;
+	text-align: center;
+}
+ul.navigation {
+
+}
+ul.navigation li {
+	/*	list-style-type: none;*/
+	font-size: 11pt;
+	padding: 6px;
+}
+ul.navigation li a {
+	text-decoration: none;
+	color: gray;
+}
+ul.navigation li a:hover {
+	text-decoration: underline;
+	color: red;
+}
+table.display a {
+	text-decoration: none;
+	color: blue;
+	font-size: 11pt;
+}
+table.display a:hover {
+	text-decoration: underline;
+	color: red;
+}
+fieldset p label {
+	display: inline-block;
+	width: 90px;
+}
+label.error {
+	width: 120px;
+	color: red;
+}

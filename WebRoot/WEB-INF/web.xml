@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<display-name>EPIC</display-name>
+
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>epic.webapp.root</param-value>
+	</context-param>
+
+	<!-- log4j 配置 开始 -->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:log4j.properties</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jRefreshInterval</param-name>
+		<param-value>600000</param-value>
+	</context-param>
+	<!-- log4j 配置 结束 -->
+
+	<!-- Spring配置文件开始 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath*:spring-*.xml
+		</param-value>
+	</context-param>
+	<!-- Spring配置文件结束 -->
+
+	<!-- 设置servlet编码开始 -->
+	<filter>
+		<filter-name>Set Character Encoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter
+		</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>Set Character Encoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- 设置servlet编码结束 -->
+
+	<!-- 权限 <filter> <filter-name>springSecurityFilterChain</filter-name> <filter-class> 
+		org.springframework.web.filter.DelegatingFilterProxy </filter-class> </filter> 
+		<filter-mapping> <filter-name>springSecurityFilterChain</filter-name> <url-pattern>/*</url-pattern> 
+		</filter-mapping> -->
+	<!-- -->
+	<filter>
+		<filter-name>securityFilter</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+		<init-param>
+			<param-name>targetBeanName</param-name>
+			<param-value>securityFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>securityFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--如果 发现报 该错误 No mapping found for HTTP request with URI 加入下mapping -->
+	<!-- <servlet-mapping> <servlet-name>jsp</servlet-name> <url-pattern>*.jsp</url-pattern> 
+		</servlet-mapping> -->
+
+	<!-- 浏览器不支持put,delete等method,由该filter将/blog?_method=delete转换为标准的http delete方法 -->
+	<filter>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<servlet-name>spring</servlet-name>
+	</filter-mapping>
+
+	<!-- OpenSessionInViewFilter <filter> <filter-name>openSessionInViewFilter</filter-name> 
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class> 
+		<init-param> <param-name>sessionFactoryBean</param-name> <param-value>sessionFactory</param-value> 
+		</init-param> </filter> <filter-mapping> <filter-name>openSessionInViewFilter</filter-name> 
+		<url-pattern>/*</url-pattern> </filter-mapping> -->
+
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>com.epic.core.security.SessionListener
+		</listener-class>
+	</listener>
+	<!-- Spring 刷新Introspector防止内存泄露 -->
+	<listener>
+		<listener-class>
+			org.springframework.web.util.IntrospectorCleanupListener
+		</listener-class>
+	</listener>
+	<!-- 这个监听器会在session 创建和销毁的时候通知Spring Security。 -->
+	<!-- 防止多人登陆 ,控制一个用户只能登录一次，不能在其他地方重新登录 <listener> <listener-class> org.springframework.security.web.session.HttpSessionEventPublisher 
+		</listener-class> </listener> -->
+	<servlet>
+		<servlet-name>spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:mvc-spring.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+
+	<!-- <error-page> <error-code>404</error-code> <location>/error/e-404.html</location> 
+		</error-page> <error-page> <error-code>500</error-code> <location>/error/e-500.jsp</location> 
+		</error-page> -->
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
